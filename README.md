@@ -664,9 +664,9 @@ lynx parikesit.abimanyu.it20.com:8080/public/images/abimanyu.png
 
 Kasus lain jika yang diakses bukanlah image yang mengandung kata abimanyu
 ```
-
-## Notes : Untuk Web Server Abimanyu disini kita menggunakan port 8080 untuk menghindari konflik dengan service nginx yang secara default menggunakan port 80
 lynx parikesit.abimanyu.it20.com:8080/public/images/buddies.jpg
 ```
 ![Foto](img/20_a.png)
 ![Foto](img/20_4.png)
+
+## Notes : Untuk Web Server Abimanyu disini kita menggunakan port 8080 untuk menghindari konflik dengan service nginx yang secara default menggunakan port 80
