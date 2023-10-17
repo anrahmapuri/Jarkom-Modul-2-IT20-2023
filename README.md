@@ -140,6 +140,7 @@ ping google.com -c 5
 ### Output
 
 Sadewa (Client) 
+
 ![1_ping google](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/2207c37e-ba2e-4301-acaa-ad0901b083a2)
 
 ## Soal 2
@@ -213,6 +214,7 @@ ping www.arjuna.it20.com -c 5
 ### Output
 
 Sadewa
+
 ![WhatsApp Image 2023-10-18 at 01 13 55_2630f13e](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/014bc085-1d3b-49d0-bb83-ffd4f4982a37)
 
 
@@ -286,6 +288,7 @@ ping www.abimanyu.it20.com -c 5
 ### Output
 
 Sadewa
+
 ![WhatsApp Image 2023-10-18 at 01 15 02_eb30fc47](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/72527fde-0fe1-4081-bd81-c7d02f33d3e7)
 
 
@@ -335,6 +338,7 @@ ping parikesit.abimanyu.it20.com -c 5
 ### Output
 
 Sadewa 
+
 ![WhatsApp Image 2023-10-18 at 01 16 07_9ea86c9d](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/a2f34ce5-cb19-467f-9453-f9b010fc3e78)
 
 
@@ -401,6 +405,7 @@ host -t PTR 192.243.2.4
 ### Output
 
 Sadewa
+
 ![WhatsApp Image 2023-10-18 at 01 19 06_8dac040c](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/780493ad-f8ab-4191-83d7-7166cf3ab1ee)
 
 
@@ -489,11 +494,12 @@ Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga We
 ### Output
 
 - Yudhistira
+
   ![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/bcbd470b-e72a-4d35-998f-d1fb2dd14356)
 
-    
-    
+      
 - Sadewa
+
   ![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/3537f90c-f87e-4a24-a79a-7e0d7a91ee8d)
 
 
@@ -621,6 +627,7 @@ ping www.baratayuda.abimanyu.it20.com -c 5
 ### Output
 
 Sadewa
+
 ![WhatsApp Image 2023-10-18 at 01 25 04_762616d4](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/c90e0654-1ad8-4d72-a8ec-b3d9d673d854)
 
 
@@ -666,6 +673,7 @@ ping www.rjp.baratayuda.abimanyu.it20.com -c 5
 ### Output
 
 Sadewa
+
 ![WhatsApp Image 2023-10-18 at 01 25 04_762616d4](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/c90e0654-1ad8-4d72-a8ec-b3d9d673d854)
 
 
@@ -829,8 +837,22 @@ lynx http://arjuna.it20.com
 ```
 
 ### Output
+Worker (Prabukusuma, Wisageni, Abimanyu) 
+
+![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/c7a35226-6a25-451a-9c35-e78bdb49c847)
+
+![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/4eb749e7-bfd2-4b3d-ad59-bc8f59cc5aca)
+
+![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/fe528fc0-b689-4608-b227-36ddb9b0d1af)
 
 Sadewa
+
+![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/d7373464-1160-4001-8fa6-392fc144ef59)
+
+![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/b998902a-8a04-4aaa-ac11-0e3b1f901f62)
+
+![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/333ddbad-ee05-4368-a256-3362cd020e8f)
+
 
 ## Nomor 11
 **Soal** : Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
