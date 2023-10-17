@@ -492,7 +492,7 @@ Seperti yang kita tahu karena banyak sekali informasi yang harus diterima, buatl
 ### Cara Pengerjaan
 
 - Yudhistira
-    - Menambahkan konfigurasi `ns1     IN      A       192.173.2.2     ; IP Werkudara` pada /etc/bind/jarkom/abimanyu.it20.com
+    - Menambahkan konfigurasi `ns1     IN      A       192.243.2.2     ; IP Werkudara` pada /etc/bind/jarkom/abimanyu.it20.com
         
         ```bash
         echo ';
