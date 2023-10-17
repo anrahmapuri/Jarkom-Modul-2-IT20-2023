@@ -10,7 +10,7 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 
 ### Cara Pengerjaan
 
-- Pertama, membuat konfirgurasi network pada setiap node
+- Membuat konfirgurasi network pada setiap node sesuai dengan kerangka Topologi 02
     - Router Pandudewanata
         
         ```bash
@@ -117,7 +117,7 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 - Menjalankan command dibawah ini pada Router Pandudewanata
     
     ```bash
-    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.173.0.0/16
+    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.243.0.0/16
     echo 'nameserver 192.168.122.1' > /etc/resolv.conf
     ```
     
@@ -130,18 +130,15 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 
 ### Testing
 
-- Testing akses internet dengan contoh tujuan [google.com](http://google.com) pada seluruh node.
-    
-    ```bash
-    ping google.com -c 5
-    ```
-    
+Testing akses internet dengan contoh tujuan [google.com](http://google.com) pada seluruh node. 
+
+```bash
+ping google.com -c 5
+```
 
 ### Output
 
-Testing pada salah satu Client, yaitu Sadewa
-
-insert foto 
+Sadewa (Client) 
 
 ## Soal 2
 
@@ -150,56 +147,70 @@ Buatlah website utama pada node arjuna dengan akses ke **arjuna.it20.com** denga
 ### Cara Pengerjaan
 
 - Yudhistira
-    
-    ```bash
-    # Menambahkan zona "arjuna.it20.com" ke /etc/bind/named.conf.local
-    echo 'zone "arjuna.it20.com" {
-            type master;
-            file "/etc/bind/jarkom/arjuna.it20.com";
-            allow-transfer { 192.243.2.3; };
-    };' > /etc/bind9/named.conf.local
-    
-    # Membuat direktori untuk zona "arjuna.it20.com"
-    mkdir /etc/bind/jarkom
-    
-    # Menyalin berkas db.local ke /etc/bind/jarkom/arjuna.it20.com
-    cp /etc/bind/db.local /etc/bind/jarkom/arjuna.it20.com
-    
-    # Menambahkan konfigurasi untuk zona "arjuna.it20.com" ke berkas /etc/bind/jarkom/arjuna.it20.com
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     arjuna.it20.com. root.arjuna.it20.com. (
-                            2023101001      ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      arjuna.it20.com.  # Menetapkan nama server name server (NS)
-    @       IN      A       192.243.3.2   ; # Menetapkan alamat IP Yudhistira
-    www     IN      CNAME   arjuna.it20.com.' > /etc/bind/jarkom/arjuna.it20.com# Alias "www" yang mengarah ke "arjuna.it20.com"
-    
-    # Merestart layanan bind9
-    service bind9 restart
-    ```
-    
+    - Installasi bind9 dan dnsutils
+        
+        ```bash
+        apt-get update
+        apt-get install bind9 dnsutils -y
+        ```
+        
+    - Menambahkan zona "arjuna.it20.com" ke /etc/bind/named.conf.local
+        
+        ```bash
+        echo 'zone "arjuna.it20.com" {
+                type master;
+                file "/etc/bind/jarkom/arjuna.it20.com";
+                allow-transfer { 192.243.2.3; };
+        };' > /etc/bind9/named.conf.local
+        ```
+        
+    - Membuat direktori untuk zona "arjuna.it20.com" dan menyalin berkas db.local ke /etc/bind/jarkom/arjuna.it20.com
+        
+        ```bash
+        mkdir /etc/bind/jarkom
+        
+        cp /etc/bind/db.local /etc/bind/jarkom/arjuna.it20.com
+        ```
+        
+    - Menambahkan konfigurasi untuk zona "arjuna.it20.com" ke berkas /etc/bind/jarkom/arjuna.it20.com
+        
+        ```bash
+        echo '
+        ;
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     arjuna.it20.com. root.arjuna.it20.com. (
+                                2023101001      ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      arjuna.it20.com.  # Menetapkan nama server name server (NS)
+        @       IN      A       192.243.3.2   ; # Menetapkan alamat IP Yudhistira
+        www     IN      CNAME   arjuna.it20.com.' > /etc/bind/jarkom/arjuna.it20.com# Alias "www" yang mengarah ke "arjuna.it20.com"
+        ```
+        
+    - Restart bind9
+        
+        ```bash
+        service bind9 restart
+        ```
+        
 
 ### Testing
 
-- Arjuna
-    
-    ```bash
-    ping arjuna.it20.com -c 5
-    ping www.arjuna.it20.com -c 5
-    ```
-    
+Arjuna
+
+```bash
+ping arjuna.it20.com -c 5
+ping www.arjuna.it20.com -c 5
+```
 
 ### Output
 
-hahahha 
+Arjuna 
 
 ## Soal 3
 
@@ -208,64 +219,69 @@ Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses k
 ### Cara Pengerjaan
 
 - Yudhistira
-    
-    ```bash
-    
-    # Installasi BIND9 dan dnsutils
-    apt-get update
-    apt-get install bind9 dnsutils -y
-    
-    # Menambahkan konfigurasi zona "abimanyu.it20.com" ke /etc/bind/named.conf.local
-    echo 'zone "arjuna.it20.com" {
-            type master;              # Menentukan jenis zona (master)
-            file "/etc/bind/jarkom/arjuna.it20.com";  # Menentukan lokasi berkas zona
-            allow-transfer { 192.243.2.3; }; // IP Arjuna  # Mengizinkan transfer zona ke alamat IP tertentu (192.243.2.3)
-    };
-    
-    zone "abimanyu.it20.com" {
-            type master;              # Jenis zona (master)
-            file "/etc/bind/jarkom/abimanyu.it20.com";  # Lokasi berkas zona
-            allow-transfer { 192.243.2.3; }; // IP Arjuna  # Mengizinkan transfer zona ke alamat IP tertentu (192.243.2.3)
-    };' > /etc/bind/named.conf.local
-    
-    # Menyalin berkas db.local ke /etc/bind/jarkom/abimanyu.it20.com
-    cp /etc/bind/db.local /etc/bind/jarkom/abimanyu.it20.com
-    
-    # Menambahkan konfigurasi untuk zona "abimanyu.it20.com" ke berkas /etc/bind/jarkom/abimanyu.it20.com
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
-                            2023101001      ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
-    @       IN      A       192.243.3.2     ; # Menetapkan alamat IP Yudhistira
-    www     IN      CNAME   abimanyu.it20.com.'  # Alias "www" yang mengarah ke "abimanyu.it20.com"
-    
-    # Merestart layanan bind9
-    service bind9 restart
-    ```
-    
+    - Installasi bind9 dan dnsutils
+        
+        ```bash
+        apt-get update
+        apt-get install bind9 dnsutils -y
+        ```
+        
+    - Menambahkan konfigurasi zona "abimanyu.it20.com" ke /etc/bind/named.conf.local
+        
+        ```bash
+        echo 'zone "abimanyu.it20.com" {
+                type master;              
+                file "/etc/bind/jarkom/abimanyu.it20.com";  # Lokasi berkas zona
+                allow-transfer { 192.243.2.4; }; // IP Abimanyu  # Mengizinkan transfer zona ke alamat IP tertentu (192.243.2.3)
+        };' > /etc/bind/named.conf.local
+        ```
+        
+    - Menyalin berkas db.local ke /etc/bind/jarkom/abimanyu.it20.com
+        
+        ```bash
+        cp /etc/bind/db.local /etc/bind/jarkom/abimanyu.it20.com
+        ```
+        
+    - Menambahkan konfigurasi untuk zona "abimanyu.it20.com" ke berkas /etc/bind/jarkom/abimanyu.it20.com
+        
+        ```bash
+        echo '
+        ;
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
+                                2023101001      ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
+        @       IN      A       192.243.3.2     ; # Menetapkan alamat IP Yudhistira
+        www     IN      CNAME   abimanyu.it20.com.'  # Alias "www" yang mengarah ke "abimanyu.it20.com"
+        
+        ```
+        
+    - Restart bind9
+        
+        ```bash
+        service bind9 restart
+        ```
+        
 
 ### Testing
 
-- Abimanyu
-    
-    ```bash
-    ping abimanyu.it20.com -c 5
-    ping www.abimanyu.it20.com -c 5
-    ```
-    
+Abimanyu
+
+```bash
+ping abimanyu.it20.com -c 5
+ping www.abimanyu.it20.com -c 5
+```
 
 ### Output
 
-hahahha 
+Abimanyu
 
 ## Soal 4
 
@@ -273,42 +289,46 @@ Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain *
 
 ### Cara Pengerjaan
 
-- Yudhistira → Menambahkan subdomain parikesit
-    
-    ```bash
-    
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
-                            2023101001      ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
-    @       IN      A       192.243.3.2     ; # Menetapkan alamat IP Yudhistira
-    www     IN      CNAME   abimanyu.it20.com.
-    parikesit IN    A       192.243.2.4     ; IP Abimanyu'  
-    
-    # Merestart layanan bind9
-    service bind9 restart
-    ```
-    
+- Yudhistira →
+    - Menambahkan subdomain parikesit → `parikesit IN    A       192.243.2.4     ; IP Abimanyu' > /etc/bind/jarkom/abimanyu.it20.com` saja pada DNS Master.
+        
+        ```bash
+        
+        echo ';
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
+                                2023101001      ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
+        @       IN      A       192.243.3.2     ; # Menetapkan alamat IP Yudhistira
+        www     IN      CNAME   abimanyu.it20.com.
+        parikesit IN    A       192.243.2.4     ; IP Abimanyu' > /etc/bind/jarkom/abimanyu.it20.com 
+        ```
+        
+    - Restart bind9
+        
+        ```bash
+        service bind9 restart
+        ```
+        
 
 ### Testing
 
-- Abimanyu
-    
-    ```bash
-    ping parikesit.abimanyu.it20.com -c 5
-    ```
-    
+Abimanyu
+
+```bash
+ping parikesit.abimanyu.it20.com -c 5
+```
 
 ### Output
+
+Abimanyu
 
 ## Soal 5
 
@@ -317,71 +337,62 @@ Buat juga reverse domain untuk domain utama. (*Abimanyu saja yang direverse*)
 ### Cara Pengerjaan
 
 - Yudhistira
-    
-    ```bash
-    echo 'zone "2.243.192.in-addr.arpa" {
-        type master;
-        file "/etc/bind/jarkom/2.243.192.in-addr.arpa";
-    };' > /etc/bind/named.conf.local
-    
-    cp /etc/bind/db.local /etc/bind/jarkom/3.173.192.in-addr.arpa
-    
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
-                                  2         ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      abimanyu.it20.com.
-    4       IN      PTR     abimanyu.a09.com.' > /etc/bind/jarkom/2.243.192.in-addr.arpa
-    
-    service bind9 restart
-    
-    # Menambahkan konfigurasi zona reverse DNS 
-    echo 'zone "2.243.192.in-addr.arpa" {
-        type master;  # Menentukan jenis zona (master)
-        file "/etc/bind/jarkom/2.243.192.in-addr.arpa";  # Menentukan lokasi berkas zona reverse DNS
-    };' > /etc/bind/named.conf.local
-    
-    cp /etc/bind/db.local /etc/bind/jarkom/2.243.192.in-addr.arpa
-    
-    # Menambahkan konfigurasi untuk zona reverse DNS ke berkas /etc/bind/jarkom/2.243.192.in-addr.arpa
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
-                                  2         ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
-    4       IN      PTR     abimanyu.it20.com.' > /etc/bind/jarkom/2.243.192.in-addr.arpa  # Menetapkan PTR (Pointer) record untuk alamat IP "192.243.2.4"
-    
-    # Merestart layanan bind9
-    service bind9 restart
-    ```
-    
+    - Menambahkan konfigurasi zona reverse DNS
+        
+        ```bash
+        echo 'zone "2.243.192.in-addr.arpa" {
+            type master;
+            file "/etc/bind/jarkom/2.243.192.in-addr.arpa";
+        };' > /etc/bind/named.conf.local
+        ```
+        
+    - Menambahkan konfigurasi untuk zona reverse DNS ke berkas /etc/bind/jarkom/2.243.192.in-addr.arpa
+        
+        ```bash
+        echo 'zone "2.243.192.in-addr.arpa" {
+            type master;  # Menentukan jenis zona (master)
+            file "/etc/bind/jarkom/2.243.192.in-addr.arpa";  # Menentukan lokasi berkas zona reverse DNS
+        };' > /etc/bind/named.conf.local
+        ```
+        
+    - Menenetapkan PTR (Pointer) record untuk alamat IP Abimanyu "192.243.2.4"
+        
+        ```bash
+        echo '
+        ;
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
+                                      2         ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
+        4       IN      PTR     abimanyu.it20.com.' > /etc/bind/jarkom/2.243.192.in-addr.arpa  # Menetapkan PTR (Pointer) record untuk alamat IP "192.243.2.4"
+        
+        ```
+        
+    - Restart bind9
+        
+        ```bash
+        service bind9 restart
+        ```
+        
 
 ### Testing
 
-- Abimanyu
-    
-    ```bash
-    host -t PTR 192.243.2.4 
-    ```
-    
+Abimanyu
+
+```bash
+host -t PTR 192.243.2.4 
+```
 
 ### Output
+
+Abimanyu
 
 ## Soal 6
 
@@ -390,59 +401,73 @@ Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga We
 ### Cara Pengerjaan
 
 - Yudhistira
-    
-    ```bash
-    echo '
-    zone "arjuna.it20.com" {
-        type master;
-        notify yes;
-        also-notify { 192.243.2.2; }; // Masukan IP Werdukara tanpa tanda petik
-        allow-transfer { 192.243.2.2; }; // Masukan IP Werdukara tanpa tanda petik
-        file "/etc/bind/jarkom/arjuna.IT20.com";
-    
-    };
-    
-    zone "abimanyu.it20.com" {
-        type master;
-        notify yes;
-        also-notify { 192.243.2.2; }; // Masukan IP Werdukara tanpa tanda petik
-        allow-transfer { 192.243.2.2; }; // Masukan IP Werdukara tanpa tanda petik
-        file "/etc/bind/jarkom/abimanyu.IT20.com";
-    
-    };
-    
-    zone "2.243.192.in-addr.arpa" {
-        type master;
-        file "/etc/bind/jarkom/2.243.192.in-addr.arpa";
-    };' > /etc/bind/named.conf.local
-    
-    service bind9 restart
-    service bind9 stop
-    ```
-    
+    - Menambah konfigurasi `also-notify` dan `allow-transfer` pada zona "[arjuna.it20.com](http://arjuna.it20.com/)" dan "[abimanyu.it20.com](http://abimanyu.it20.com/)" dalam named.conf.local
+        
+        ```bash
+        echo '
+        zone "arjuna.it20.com" {
+            type master;
+            notify yes;
+            also-notify { 192.243.2.2; }; 
+            allow-transfer { 192.243.2.2; }; 
+            file "/etc/bind/jarkom/arjuna.IT20.com";
+        
+        };
+        
+        zone "abimanyu.it20.com" {
+            type master;
+            notify yes;
+            also-notify { 192.243.2.2; }; // Masukan IP Werdukara tanpa tanda petik
+            allow-transfer { 192.243.2.2; }; // Masukan IP Werdukara tanpa tanda petik
+            file "/etc/bind/jarkom/abimanyu.IT20.com";
+        
+        }; ' > /etc/bind/named.conf.local
+        ```
+        
+    - Restart dan stop bind9 untuk testing DNS Slave
+        
+        ```bash
+        service bind9 restart
+        service bind9 stop
+        ```
+        
 - Werkudara
-    
-    ```bash
-    echo '
-    # DNS SLave
-    zone "arjuna.it20.com" {
-        type slave;
-        masters { 192.243.3.2; }; // Masukan IP Yudhistira tanpa tanda petik
-        file "/var/lib/bind/arjuna.IT20.com";
-    
-    }
-    # DNS SLave
-    zone "abimanyu.it20.com" {
-        type slave;
-        masters { 192.243.3.2; }; // Masukan IP Yudhistira tanpa tanda petik
-        file "/var/lib/bind/abimanyu.IT20.com";
-    
-    }; ' > /etc/bind/named.conf.local
-    ```
-    
+    - Installasi bind9 dan dnsutils
+        
+        ```bash
+        apt-get update
+        apt-get install bind9 dnsutils -y
+        ```
+        
+    - Konfigurasi server DNS sebagai slave untuk zona "[arjuna.it20.com](http://arjuna.it20.com/)" dan "[abimanyu.it20.com](http://abimanyu.it20.com/)"
+        
+        ```bash
+        echo '
+        # DNS SLave
+        zone "arjuna.it20.com" {
+            type slave;
+            masters { 192.243.3.2; }; // IP Yudhistira 
+            file "/var/lib/bind/arjuna.IT20.com";
+        
+        }
+        # DNS SLave
+        zone "abimanyu.it20.com" {
+            type slave;
+            masters { 192.243.3.2; }; // Masukan IP Yudhistira
+            file "/var/lib/bind/abimanyu.IT20.com";
+        
+        }; ' > /etc/bind/named.conf.local
+        ```
+        
 
 ### Testing
 
+- Yudhitira
+    
+    ```bash
+    service bind9 stop
+    ```
+    
 - Abimanyu
     
     ```bash
@@ -453,162 +478,181 @@ Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga We
 
 ### Output
 
-## Soal 7
-
-Seperti yang kita tahu karena banyak sekali informasi yang harus diterima, buatlah subdomain khusus untuk perang yaitu **baratayuda.abimanyu.yyy.com** dengan alias **www.baratayuda.abimanyu.yyy.com** yang didelegasikan dari Yudhistira ke Werkudara dengan IP menuju ke Abimanyu dalam folder Baratayuda.
-
-### Cara Pengerjaan
-
 - Yudhistira
     
-    ```bash
-    echo ';
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
-                            2023101001      ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      abimanyu.it20.com.
-    @       IN      A       192.243.3.2     ; IP Yudhistira
-    www     IN      CNAME   abimanyu.a09.com.
-    parikesit IN    A       192.243.2.4     ; IP Abimanyu
-    ns1     IN      A       192.243.2.2   ; IP Werkudara
-    baratayuda IN   NS      ns1' > /etc/bind/jarkom/abimanyu.it20.com
     
-    echo "options {
-        directory \"/var/cache/bind\";
-        //dnssec-validation auto;
-    
-        allow-query { any; };
-        auth-nxdomain no;
-        listen-on-v6 { any; };
-    };" > /etc/bind/named.conf.options
-    
-    service bind9 restart
-    ```
-    
-- Werkudara
-    
-    ```bash
-    echo 'zone "baratayuda.abimanyu.it20.com" {
-            type master;
-            file "/etc/bind/baratayuda/baratayuda.abimanyu.it20.com";
-    };' >> /etc/bind/named.conf.local
-    
-    mkdir /etc/bind/baratayuda
-    
-    cp /etc/bind/db.local /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
-    
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     baratayuda.abimanyu.it20.com. root.baratayuda.abimanyu.it20.com. (
-                            2023101001      ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      baratayuda.abimanyu.it20.com.
-    @       IN      A       192.243.2.4     ; IP Abimanyu
-    www     IN      CNAME   baratayuda.abimanyu.it20.com.' > /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
-    
-    echo "options {
-        directory \"/var/cache/bind\";
-    
-        // If there is a firewall between you and nameservers you want
-        // to talk to, you may need to fix the firewall to allow multiple
-        // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
-    
-        // If your ISP provided one or more IP addresses for stable
-        // nameservers, you probably want to use them as forwarders.
-        // Uncomment the following block, and insert the addresses replacing
-        // the all-0's placeholder.
-    
-        // forwarders {
-        //      0.0.0.0;
-        // };
-    
-        //========================================================================
-        // If BIND logs error messages about the root key being expired,
-        // you will need to update your keys.  See https://www.isc.org/bind-keys
-        //========================================================================
-        //dnssec-validation auto;
-    
-        allow-query { any; };
-        auth-nxdomain no;
-        listen-on-v6 { any; };
-    };" > /etc/bind/named.conf.options
-    
-    service bind9 restart
-    ```
-    
-
-### Testing
-
 - Abimanyu
     
-    ```bash
-    ping baratayuda.abimanyu.it20.com -c 5
-    ping www.baratayuda.abimanyu.it20.com -c 5
-    ```
     
 
-## Soal 8
+## Soal 7
 
-Untuk informasi yang lebih spesifik mengenai Ranjapan Baratayuda, buatlah subdomain melalui Werkudara dengan akses **rjp.baratayuda.abimanyu.yyy.com** dengan alias **www.rjp.baratayuda.abimanyu.yyy.com** yang mengarah ke Abimanyu.
+Seperti yang kita tahu karena banyak sekali informasi yang harus diterima, buatlah subdomain khusus untuk perang yaitu **baratayuda.abimanyu.it20.com** dengan alias **www.baratayuda.abimanyu.it20.com** yang didelegasikan dari Yudhistira ke Werkudara dengan IP menuju ke Abimanyu dalam folder Baratayuda.
 
 ### Cara Pengerjaan
 
 - Yudhistira
-    
-    ```bash
-    echo '
-    ;
-    ; BIND data file for local loopback interface
-    ;
-    $TTL    604800
-    @       IN      SOA     baratayuda.abimanyu.it20.com. root.baratayuda.abimanyu.it20.com. (
-                            2023101001      ; Serial
-                             604800         ; Refresh
-                              86400         ; Retry
-                            2419200         ; Expire
-                             604800 )       ; Negative Cache TTL
-    ;
-    @       IN      NS      baratayuda.abimanyu.it20.com.
-    @       IN      A       192.243.2.4     ; IP Abimanyu
-    www     IN      CNAME   baratayuda.abimanyu.it20.com.
-    rjp             IN      A       192.243.2.4     ; IP Abimanyu
-    www.rjp         IN      CNAME   rjp.baratayuda.abimanyu.it20.com.' > /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
-    ```
-    
+    - Menambahkan konfigurasi `ns1     IN      A       192.173.2.2     ; IP Werkudara` pada /etc/bind/jarkom/abimanyu.it20.com
+        
+        ```bash
+        echo ';
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
+                                2023101001      ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      abimanyu.it20.com.
+        @       IN      A       192.243.3.2     ; IP Yudhistira
+        www     IN      CNAME   abimanyu.it20.com.
+        parikesit IN    A       192.243.2.4     ; IP Abimanyu
+        ns1     IN      A       192.243.2.2     ; IP Werkudara
+        baratayuda IN   NS      ns1' > /etc/bind/jarkom/abimanyu.it20.com
+        ```
+        
+    - Menambah konfigurasi  `allow-query { any; };` pada named.conf.options
+        
+        ```bash
+        echo "options {
+            directory \"/var/cache/bind\";
+            //dnssec-validation auto;
+        
+            allow-query { any; };
+            auth-nxdomain no;
+            listen-on-v6 { any; };
+        };" > /etc/bind/named.conf.options
+        ```
+        
+    - Restart bind9
+        
+        ```bash
+        
+        service bind9 restart
+        ```
+        
+- Werkudara
+    - Menambahkan konfigurasi zona "[baratayuda.abimanyu.it20.com](http://baratayuda.abimanyu.it20.com/)" ke named.conf.local
+        
+        ```bash
+        echo 'zone "baratayuda.abimanyu.it20.com" {
+                type master;
+                file "/etc/bind/baratayuda/baratayuda.abimanyu.it20.com";
+        };' >> /etc/bind/named.conf.local
+        ```
+        
+    - Membuat direktori /etc/bind/baratayuda dan menyalin berkas db.local ke /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
+        
+        ```bash
+        mkdir /etc/bind/baratayuda
+        
+        cp /etc/bind/db.local /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
+        ```
+        
+    - Menambahkan konfigurasi zona "[baratayuda.abimanyu.it20.com](http://baratayuda.abimanyu.it20.com/)" ke berkas /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
+        
+        ```bash
+        hh
+        echo '
+        ;
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     baratayuda.abimanyu.it20.com. root.baratayuda.abimanyu.it20.com. (
+                                2023101001      ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      baratayuda.abimanyu.it20.com.
+        @       IN      A       192.243.2.4     ; IP Abimanyu
+        www     IN      CNAME   baratayuda.abimanyu.it20.com.' > /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
+        
+        ```
+        
+    - Menambah konfigurasi  `allow-query { any; };` pada named.conf.options
+        
+        ```bash
+        echo "options {
+            directory \"/var/cache/bind\";
+            //dnssec-validation auto;
+        
+            allow-query { any; };
+            auth-nxdomain no;
+            listen-on-v6 { any; };
+        };" > /etc/bind/named.conf.options
+        ```
+        
+    - Restart bind9
+        
+        ```bash
+        service bind9 restart
+        ```
+        
 
 ### Testing
 
-- client
-    
-    ```bash
-    ping rjp.baratayuda.abimanyu.it20.com -c 5
-    ping www.rjp.baratayuda.abimanyu.it20.com -c 5
-    ```
-    
+Sadewa 
+
+```bash
+ping baratayuda.abimanyu.it20.com -c 5
+ping www.baratayuda.abimanyu.it20.com -c 5
+```
 
 ### Output
 
-hahaha 
+Sadewa
+
+## Soal 8
+
+Untuk informasi yang lebih spesifik mengenai Ranjapan Baratayuda, buatlah subdomain melalui Werkudara dengan akses **rjp.baratayuda.abimanyu.it20.com** dengan alias **www.rjp.baratayuda.abimanyu.it20.com** yang mengarah ke Abimanyu.
+
+### Cara Pengerjaan
+
+- Yudhistira
+    - MEnambahkan konfigurasi subdomain delegasi rjp pada /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
+        
+        ```bash
+        echo '
+        ;
+        ; BIND data file for local loopback interface
+        ;
+        $TTL    604800
+        @       IN      SOA     baratayuda.abimanyu.it20.com. root.baratayuda.abimanyu.it20.com. (
+                                2023101001      ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      baratayuda.abimanyu.it20.com.
+        @       IN      A       192.243.2.4     ; IP Abimanyu
+        www     IN      CNAME   baratayuda.abimanyu.it20.com.
+        rjp             IN      A       192.243.2.4     ; IP Abimanyu
+        www.rjp         IN      CNAME   rjp.baratayuda.abimanyu.it20.com.' > /etc/bind/baratayuda/baratayuda.abimanyu.it20.com
+        ```
+        
+
+### Testing
+
+Sadewa  
+
+```bash
+ping rjp.baratayuda.abimanyu.it20.com -c 5
+ping www.rjp.baratayuda.abimanyu.it20.com -c 5
+```
+
+### Output
+
+Sadewa
 
 ## Soal 9 dan 10
 
-Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker.
-
-Kemudian gunakan algoritma **Round Robin** untuk Load Balancer pada **Arjuna**. Gunakan *server_name* pada soal nomor 1. Untuk melakukan pengecekan akses alamat web tersebut kemudian pastikan worker yang digunakan untuk menangani permintaan akan berganti ganti secara acak. Untuk webserver di masing-masing worker wajib berjalan di port 8001-8003. Contoh
+Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker. Kemudian gunakan algoritma **Round Robin** untuk Load Balancer pada **Arjuna**. Gunakan *server_name* pada soal nomor 1. Untuk melakukan pengecekan akses alamat web tersebut kemudian pastikan worker yang digunakan untuk menangani permintaan akan berganti ganti secara acak. Untuk webserver di masing-masing worker wajib berjalan di port 8001-8003. Contoh
 
 - *Prabakusuma:8001*
 - *Abimanyu:8002*
@@ -616,107 +660,158 @@ Kemudian gunakan algoritma **Round Robin** untuk Load Balancer pada **Arjuna**. 
 
 ### Cara Pengerjaan
 
-- Web Server (Abimanyu, Werdukara, Prabukusuma) → dibedakan inisialisasi Port
-    
-    ```bash
-    service nginx start
-    
-    mkdir /var/www/jarkom
-    
-    echo "<?php
-    \$hostname = gethostname();
-    \$date = date('Y-m-d H:i:s');
-    \$php_version = phpversion();
-    \$username = get_current_user();
-    
-    echo \"Hello World!<br>\";
-    echo \"Saya adalah: \$username<br>\";
-    echo \"Saat ini berada di: \$hostname<br>\";
-    echo \"Versi PHP yang saya gunakan: \$php_version<br>\";
-    echo \"Tanggal saat ini: \$date<br>\";
-    ?>" > /var/www/jarkom/index.php
-    
-    conf_server="
-    server {
-    
-        listen 8001; 
-    
-        root /var/www/jarkom;
-    
-        index index.php index.html index.htm;
-        server_name _;
+- Web Server / Worker (Abimanyu, Werdukara, Prabukusuma)
+    - Instalasi kebutuhan
         
-        location / {
-            try_files \$uri \$uri/ /index.php?\$query_string;
+        ```bash
+        apt-get update
+        apt-get install dnsutils -y
+        apt-get install lynx -y
+        apt-get install nginx -y
+        apt-get install apache2 -y
+        apt-get install libapache2-mod-php7.2 -y
+        apt-get install wget -y
+        apt-get install unzip -y
+        apt-get install php -y
+        apt-get install php-fpm -y
+        ```
+        
+    - Menjalankan nginx
+        
+        ```bash
+        service nginx start
+        ```
+        
+    - Menambahkan template worker php ke /var/www/jarkom/index.php
+        
+        ```bash
+        mkdir /var/www/jarkom
+        
+        echo "<?php
+        \$hostname = gethostname();
+        \$date = date('Y-m-d H:i:s');
+        \$php_version = phpversion();
+        \$username = get_current_user();
+        
+        echo \"Hello World!<br>\";
+        echo \"Saya adalah: \$username<br>\";
+        echo \"Saat ini berada di: \$hostname<br>\";
+        echo \"Versi PHP yang saya gunakan: \$php_version<br>\";
+        echo \"Tanggal saat ini: \$date<br>\";
+        ?>" > /var/www/jarkom/index.php
+        ```
+        
+    - Menambahkan konfigurasi masing masing worker pada /etc/nginx/sites-available/jarkom
+        - *Prabakusuma:8001*
+        - *Abimanyu:8002*
+        - *Wisanggeni:8003*
+        
+        ```bash
+        echo "
+        server {
+        
+            listen 800X;
+        
+            root /var/www/jarkom;
+        
+            index index.php index.html index.htm;
+            server_name _;
+            
+            location / {
+                try_files \$uri \$uri/ /index.php?\$query_string;
+            }
+        
+            # pass PHP scripts to FastCGI server
+            location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+            }
+        
+            location ~ /\.ht {
+             deny all;
+            }
+        
+            error_log /var/log/nginx/jarkom_error.log;
+            access_log /var/log/nginx/jarkom_access.log;
         }
-    
-        # pass PHP scripts to FastCGI server
-        location ~ \.php$ {
-            include snippets/fastcgi-php.conf;
-            fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
-        }
-    
-        location ~ /\.ht {
-         deny all;
-        }
-    
-        error_log /var/log/nginx/jarkom_error.log;
-        access_log /var/log/nginx/jarkom_access.log;
-    }
-    "
-    echo "$conf_server" > /etc/nginx/sites-available/jarkom
-    
-    ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
-    
-    rm /etc/nginx/sites-enabled/default
-    
-    service nginx restart
-    
-    service php7.2-fpm start
-    service php7.2-fpm status
-    ```
-    
+        " > /etc/nginx/sites-available/jarkom
+        ```
+        
+    - Menajalankan symlink
+        
+        ```bash
+        ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
+        ```
+        
+    - Menghapus `default` pada nginx agar tidak terjadi konflik
+        
+        ```bash
+        rm /etc/nginx/sites-enabled/default
+        ```
+        
+    - Menjalankan nginx dan php
+        
+        ```bash
+        service nginx restart
+        
+        service php7.2-fpm start
+        service php7.2-fpm status
+        ```
+        
 - Arjuna
-    
-    ```bash
-    echo 'upstream arjuna {
-      server 192.243.2.5:8001; # IP PrabuKusuma
-      server 192.243.2.4:8002; # IP Abimanyu
-      server 192.243.2.6:8003; # IP Wisanggeni
-    }
-    
-    server {
-      listen 80;
-      server_name arjuna.it20.com www.arjuna.it20.com;
-    
-      location / {
-        proxy_pass http://arjuna;
-      }
-    }
-    ' > /etc/nginx/sites-available/jarkom
-    
-    ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled/jarkom
-    
-    rm /etc/nginx/sites-enabled/default
-    
-    service nginx restart
-    ```
-    
+    - Membuat Konfigurasi Load Balancing dengan Round Robin pada /etc/nginx/sites-available/jarkom
+        
+        ```bash
+        echo 'upstream arjuna {
+          server 192.243.2.5:8001; # IP PrabuKusuma
+          server 192.243.2.4:8002; # IP Abimanyu
+          server 192.243.2.6:8003; # IP Wisanggeni
+        }
+        
+        server {
+          listen 80;
+          server_name arjuna.it20.com www.arjuna.it20.com;
+        
+          location / {
+            proxy_pass http://arjuna;
+          }
+        }
+        ' > /etc/nginx/sites-available/jarkom
+        ```
+        
+    - Menajalankan symlink
+        
+        ```bash
+        ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
+        ```
+        
+    - Menghapus `default` pada nginx agar tidak terjadi konflik
+        
+        ```bash
+        rm /etc/nginx/sites-enabled/default
+        ```
+        
+    - Menjalankan nginx
+        
+        ```bash
+        service nginx restart
+        ```
+        
 
 ### Testing
 
-- Sadewa
-    
-    ```bash
-    lynx http://192.243.2.4
-    lynx http://192.243.2.5
-    lynx http://192.243.2.6
-    lynx http://arjuna.it20.com
-    ```
-    
+Sadewa 
+
+```bash
+lynx http://192.243.2.4 
+lynx http://192.243.2.5
+lynx http://192.243.2.6
+lynx http://arjuna.it20.com
+```
 
 ### Output
 
+Sadewa
 
 ## Nomor 11
 **Soal** : Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
