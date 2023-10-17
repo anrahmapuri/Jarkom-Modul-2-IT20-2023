@@ -11,6 +11,7 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 ### Cara Pengerjaan
 
 - Membuat konfirgurasi network pada setiap node sesuai dengan kerangka Topologi 02
+  ![topologi](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/e57e833a-8447-45c1-ba69-b41a077e511c)
     - Router Pandudewanata
         
         ```bash
@@ -131,6 +132,7 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 ### Testing
 
 Testing akses internet dengan contoh tujuan [google.com](http://google.com) pada seluruh node. 
+![1_ping google](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/2207c37e-ba2e-4301-acaa-ad0901b083a2)
 
 ```bash
 ping google.com -c 5
