@@ -132,7 +132,6 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 ### Testing
 
 Testing akses internet dengan contoh tujuan [google.com](http://google.com) pada seluruh node. 
-![1_ping google](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/2207c37e-ba2e-4301-acaa-ad0901b083a2)
 
 ```bash
 ping google.com -c 5
@@ -141,6 +140,7 @@ ping google.com -c 5
 ### Output
 
 Sadewa (Client) 
+![1_ping google](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/2207c37e-ba2e-4301-acaa-ad0901b083a2)
 
 ## Soal 2
 
@@ -203,7 +203,7 @@ Buatlah website utama pada node arjuna dengan akses ke **arjuna.it20.com** denga
 
 ### Testing
 
-Arjuna
+Sadewa
 
 ```bash
 ping arjuna.it20.com -c 5
@@ -212,7 +212,9 @@ ping www.arjuna.it20.com -c 5
 
 ### Output
 
-Arjuna 
+Sadewa
+![WhatsApp Image 2023-10-18 at 01 13 55_2630f13e](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/014bc085-1d3b-49d0-bb83-ffd4f4982a37)
+
 
 ## Soal 3
 
@@ -274,7 +276,7 @@ Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses k
 
 ### Testing
 
-Abimanyu
+Sadewa
 
 ```bash
 ping abimanyu.it20.com -c 5
@@ -283,7 +285,9 @@ ping www.abimanyu.it20.com -c 5
 
 ### Output
 
-Abimanyu
+Sadewa
+![WhatsApp Image 2023-10-18 at 01 15 02_eb30fc47](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/72527fde-0fe1-4081-bd81-c7d02f33d3e7)
+
 
 ## Soal 4
 
@@ -322,7 +326,7 @@ Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain *
 
 ### Testing
 
-Abimanyu
+Sadewa
 
 ```bash
 ping parikesit.abimanyu.it20.com -c 5
@@ -330,7 +334,9 @@ ping parikesit.abimanyu.it20.com -c 5
 
 ### Output
 
-Abimanyu
+Sadewa 
+![WhatsApp Image 2023-10-18 at 01 16 07_9ea86c9d](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/a2f34ce5-cb19-467f-9453-f9b010fc3e78)
+
 
 ## Soal 5
 
@@ -386,7 +392,7 @@ Buat juga reverse domain untuk domain utama. (*Abimanyu saja yang direverse*)
 
 ### Testing
 
-Abimanyu
+Sadewa
 
 ```bash
 host -t PTR 192.243.2.4 
@@ -394,7 +400,9 @@ host -t PTR 192.243.2.4
 
 ### Output
 
-Abimanyu
+Sadewa
+![WhatsApp Image 2023-10-18 at 01 19 06_8dac040c](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/780493ad-f8ab-4191-83d7-7166cf3ab1ee)
+
 
 ## Soal 6
 
@@ -470,7 +478,7 @@ Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga We
     service bind9 stop
     ```
     
-- Abimanyu
+- Sadewa
     
     ```bash
     ping abimanyu.it20.com -c 5
@@ -481,9 +489,14 @@ Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga We
 ### Output
 
 - Yudhistira
+  ![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/bcbd470b-e72a-4d35-998f-d1fb2dd14356)
+
     
     
-- Abimanyu
+- Sadewa
+  ![image](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/3537f90c-f87e-4a24-a79a-7e0d7a91ee8d)
+
+
     
     
 
@@ -608,6 +621,8 @@ ping www.baratayuda.abimanyu.it20.com -c 5
 ### Output
 
 Sadewa
+![WhatsApp Image 2023-10-18 at 01 25 04_762616d4](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/c90e0654-1ad8-4d72-a8ec-b3d9d673d854)
+
 
 ## Soal 8
 
@@ -651,6 +666,8 @@ ping www.rjp.baratayuda.abimanyu.it20.com -c 5
 ### Output
 
 Sadewa
+![WhatsApp Image 2023-10-18 at 01 25 04_762616d4](https://github.com/anrahmapuri/Jarkom-Modul-2-IT20-2023/assets/88900360/c90e0654-1ad8-4d72-a8ec-b3d9d673d854)
+
 
 ## Soal 9 dan 10
 
