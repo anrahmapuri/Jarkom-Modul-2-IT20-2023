@@ -450,7 +450,7 @@ lynx www.parikesit.abimanyu.it20.com:8080/secret
 ![Foto](./img/14_1.png)
 - Tampilan halaman /secret
 
-![Foto](./img/14_2.PNG)
+![Foto](./img/14_2.png)
 
 ## Nomor 15
 **Soal** : Buatlah kustomisasi halaman error pada folder /error untuk mengganti error kode pada Apache. Error kode yang perlu diganti adalah 404 Not Found dan 403 Forbidden.
@@ -664,6 +664,8 @@ lynx parikesit.abimanyu.it20.com:8080/public/images/abimanyu.png
 
 Kasus lain jika yang diakses bukanlah image yang mengandung kata abimanyu
 ```
+
+## Notes : Untuk Web Server Abimanyu disini kita menggunakan port 8080 untuk menghindari konflik dengan service nginx yang secara default menggunakan port 80
 lynx parikesit.abimanyu.it20.com:8080/public/images/buddies.jpg
 ```
 ![Foto](img/20_a.png)
