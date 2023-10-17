@@ -1,7 +1,302 @@
-# Laporan Resmi Praktikum Jaringan Komputer - Modul 2 DNS dan Web Server - IT20
+# Laporan Resmi Praktikum Jaringan Komputer - Modul 2 IT 20
 
 ### Annisa Rahmapuri - 5027211018
-### Abdul Zaki Syarul Rahmat - 502721120
+
+### Abdul Zaki Syahrul Rahmat - 502721120
+
+## Soal 1
+
+Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjuna merupakan Load Balancer yang terdiri dari beberapa Web Server yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Buatlah topologi dengan pembagian [sebagai berikut.](https://docs.google.com/spreadsheets/d/1OqwQblR_mXurPI4gEGqUe7v0LSr1yJViGVEzpMEm2e8/edit?usp=sharing) Folder topologi dapat diakses pada [drive berikut](https://drive.google.com/drive/folders/1Ij9J1HdIW4yyPEoDqU1kAwTn_iIxg3gk?usp=sharing)
+
+### Cara Pengerjaan
+
+- Pertama, membuat konfirgurasi network pada setiap node
+    - Router Pandudewanata
+        
+        ```bash
+        auto eth0
+        iface eth0 inet dhcp
+        
+        auto eth1
+        iface eth1 inet static
+            address 192.243.1.1
+            netmask 255.255.255.0
+        
+        auto eth2
+        iface eth2 inet static
+            address 192.243.2.1
+            netmask 255.255.255.0
+        
+        auto eth3
+        iface eth2 inet static
+            address 192.243.3.1
+            netmask 255.255.255.0
+        ```
+        
+    - Yudhistira DNS Master
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.3.2
+            netmask 255.255.255.0
+            gateway 192.243.3.1
+        ```
+        
+    - Sadewa Client
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.1.2
+            netmask 255.255.255.0
+            gateway 192.243.1.1
+        ```
+        
+    - Nakula Client
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.1.3
+            netmask 255.255.255.0
+            gateway 192.243.1.1
+        ```
+        
+    - Werkudara DNS Slave
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.2.2
+            netmask 255.255.255.0
+            gateway 192.243.2.1
+        ```
+        
+    - Arjuna Load Balancer
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.2.3
+            netmask 255.255.255.0
+            gateway 192.243.2.1
+        ```
+        
+    - Abimanyu Web Server
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.2.4
+            netmask 255.255.255.0
+            gateway 192.243.2.1
+        ```
+        
+    - Prabukusuma Web Server
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.2.5
+            netmask 255.255.255.0
+            gateway 192.243.2.1
+        ```
+        
+    - Wisanggeni Web Server
+        
+        ```bash
+        auto eth0
+        iface eth0 inet static
+            address 192.243.2.6
+            netmask 255.255.255.0
+            gateway 192.243.2.1
+        
+        ```
+        
+- Menjalankan command dibawah ini pada Router Pandudewanata
+    
+    ```bash
+    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.173.0.0/16
+    echo 'nameserver 192.168.122.1' > /etc/resolv.conf
+    ```
+    
+- Menambahkan command dibawah ini pada seluruh node agar dapat terkoneksi internet
+    
+    ```bash
+    echo 'nameserver 192.168.122.1' > /etc/resolv.conf
+    ```
+    
+
+### Testing
+
+- Testing akses internet dengan contoh tujuan [google.com](http://google.com) pada seluruh node.
+    
+    ```bash
+    ping google.com -c 5
+    ```
+    
+
+### Output
+
+Testing pada salah satu Client, yaitu Sadewa
+
+insert foto 
+
+## Soal 2
+
+Buatlah website utama pada node arjuna dengan akses ke **arjuna.it20.com** dengan alias **www.arjuna.it20.com**
+
+### Cara Pengerjaan
+
+- Yudhistira
+    
+    ```bash
+    # Menambahkan zona "arjuna.it20.com" ke /etc/bind/named.conf.local
+    echo 'zone "arjuna.it20.com" {
+            type master;
+            file "/etc/bind/jarkom/arjuna.it20.com";
+            allow-transfer { 192.243.2.3; };
+    };' > /etc/bind9/named.conf.local
+    
+    # Membuat direktori untuk zona "arjuna.it20.com"
+    mkdir /etc/bind/jarkom
+    
+    # Menyalin berkas db.local ke /etc/bind/jarkom/arjuna.it20.com
+    cp /etc/bind/db.local /etc/bind/jarkom/arjuna.it20.com
+    
+    # Menambahkan konfigurasi untuk zona "arjuna.it20.com" ke berkas /etc/bind/jarkom/arjuna.it20.com
+    echo '
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    $TTL    604800
+    @       IN      SOA     arjuna.it20.com. root.arjuna.it20.com. (
+                            2023101001      ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      arjuna.it20.com.  # Menetapkan nama server name server (NS)
+    @       IN      A       192.243.3.2   ; # Menetapkan alamat IP Yudhistira
+    www     IN      CNAME   arjuna.it20.com.' > /etc/bind/jarkom/arjuna.it20.com# Alias "www" yang mengarah ke "arjuna.it20.com"
+    
+    # Merestart layanan bind9
+    service bind9 restart
+    ```
+    
+
+### Testing
+
+- Arjuna
+    
+    ```bash
+    ping arjuna.it20.com -c 5
+    ping www.arjuna.it20.com -c 5
+    ```
+    
+
+### Output
+
+hahahha 
+
+## Soal 3
+
+Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke **abimanyu.it20.com** dan alias **www.abimanyu.it20.com**.
+
+### Cara Pengerjaan
+
+- Yudhistira
+    
+    ```bash
+    
+    # Installasi BIND9 dan dnsutils
+    apt-get update
+    apt-get install bind9 dnsutils -y
+    
+    # Menambahkan konfigurasi zona "abimanyu.it20.com" ke /etc/bind/named.conf.local
+    echo 'zone "arjuna.it20.com" {
+            type master;              # Menentukan jenis zona (master)
+            file "/etc/bind/jarkom/arjuna.it20.com";  # Menentukan lokasi berkas zona
+            allow-transfer { 192.243.2.3; }; // IP Arjuna  # Mengizinkan transfer zona ke alamat IP tertentu (192.243.2.3)
+    };
+    
+    zone "abimanyu.it20.com" {
+            type master;              # Jenis zona (master)
+            file "/etc/bind/jarkom/abimanyu.it20.com";  # Lokasi berkas zona
+            allow-transfer { 192.243.2.3; }; // IP Arjuna  # Mengizinkan transfer zona ke alamat IP tertentu (192.243.2.3)
+    };' > /etc/bind/named.conf.local
+    
+    # Menyalin berkas db.local ke /etc/bind/jarkom/abimanyu.it20.com
+    cp /etc/bind/db.local /etc/bind/jarkom/abimanyu.it20.com
+    
+    # Menambahkan konfigurasi untuk zona "abimanyu.it20.com" ke berkas /etc/bind/jarkom/abimanyu.it20.com
+    echo '
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    $TTL    604800
+    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
+                            2023101001      ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
+    @       IN      A       192.243.3.2     ; # Menetapkan alamat IP Yudhistira
+    www     IN      CNAME   abimanyu.it20.com.'  # Alias "www" yang mengarah ke "abimanyu.it20.com"
+    
+    # Merestart layanan bind9
+    service bind9 restart
+    ```
+    
+
+### Testing
+
+- Abimanyu
+    
+    ```bash
+    ping abimanyu.it20.com -c 5
+    ping www.abimanyu.it20.com -c 5
+    ```
+    
+
+### Output
+
+hahahha 
+
+## Soal 4
+
+Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain **parikesit.abimanyu.yyy.com** yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
+
+### Cara Pengerjaan
+
+- Yudhistira → Menambahkan subdomain parikesit
+    
+    ```bash
+    
+    echo '
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    $TTL    604800
+    @       IN      SOA     abimanyu.it20.com. root.abimanyu.it20.com. (
+                            2023101001      ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      abimanyu.it20.com.  # Menetapkan nama server name server (NS)
+    @       IN      A       192.243.3.2     ; # Menetapkan alamat IP Yudhistira
+    www     IN      CNAME   abimanyu.it20.com.
+    parikesit IN    A       192.243.2.4     ; IP Abimanyu'  
+    
+    # Merestart layanan bind9
+    service bind9 restart
+    ```
 
 ## Nomor 11
 **Soal** : Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
